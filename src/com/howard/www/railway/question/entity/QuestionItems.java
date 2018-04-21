@@ -2,6 +2,9 @@ package com.howard.www.railway.question.entity;
 
 public interface QuestionItems {
 
+	/**
+	 * 使用数组来存储问题,通过下标来区分问题的内容,解决问题所使用的方法,以及入参数
+	 */
 	public static final String[][] pendingQuestion = {
 		{ "The distance of the route A-B-C","ABC","specifiedRouteDistance"}, 
 		{ "The distance of the route A-D","AD","specifiedRouteDistance"}, 

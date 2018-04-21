@@ -22,18 +22,23 @@ public class BootInit {
 	public static void initControllerMethod(RailwayNetwork railwayNetworkMatrix,ConcurrentHashMap<String, CalculationRailwayRoute> processingMethodMap){
 		CalculationRailwayRoute routeSite=CalculationSpecifiedRouteDistance.getInstance();
 		routeSite.initParameter(railwayNetworkMatrix.obtianStationMatrix(), railwayNetworkMatrix.obtainTrainStationItems());
+		//计算站点组成的路线距离值
 		processingMethodMap.put("specifiedRouteDistance", routeSite);
 		routeSite=CalculationMinimumRouteDistance.getInstance();
 		routeSite.initParameter(railwayNetworkMatrix.obtianStationMatrix(), railwayNetworkMatrix.obtainTrainStationItems());
+		//计算两个站点之间最短路径长度
 		processingMethodMap.put("minimumRouteDistance", routeSite);
 		routeSite=CalculationCircleRouteDistance.getInstance();
 		routeSite.initParameter(railwayNetworkMatrix.obtianStationMatrix(), railwayNetworkMatrix.obtainTrainStationItems());
+		//计算循环线路路程小于N的所有可行线路
 		processingMethodMap.put("circleRouteDistance", routeSite);
 		routeSite=CalculationMostRouteDistance.getInstance();
 		routeSite.initParameter(railwayNetworkMatrix.obtianStationMatrix(), railwayNetworkMatrix.obtainTrainStationItems());
+		//计算行程数最多为N站是所有可行的线路
 		processingMethodMap.put("mostRouteDistance", routeSite);
 		routeSite=CalculationJustRightRouteDistance.getInstance();
 		routeSite.initParameter(railwayNetworkMatrix.obtianStationMatrix(), railwayNetworkMatrix.obtainTrainStationItems());
+		//计算行程数恰好为N站是所有可行的线路
 		processingMethodMap.put("justRightRouteDistance", routeSite);
 	}
 	

@@ -2,7 +2,7 @@ package com.howard.www.railway.util;
 
 /**
  * 
- * @ClassName: Util
+ * @ClassName: UtilTools
  * @Description:TODO
  * @author: mayijie
  * @date: 2018年4月19日 下午2:17:17

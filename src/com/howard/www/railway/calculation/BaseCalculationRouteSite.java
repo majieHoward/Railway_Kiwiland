@@ -59,16 +59,17 @@ public abstract class BaseCalculationRouteSite {
 		return unreachable;
 	}
 
-	/**
-	 * 深度遍历的递归
-	 */
-	private void obtainRouteSite(int begin, int end, List<Character> path, List<Integer> distance,
+	private void obtainRouteSite(int begin, int end, List<Character> route, List<Integer> distance,
 			Map<String, Integer> routeLengthMap) {
-		// 起始站点对象加入记录队列
-		path.add(trainStationItems[begin]);
-		// 遍历所有的站点
+		/**
+		 * 添加当前遍历开始的第一个站点
+		 */
+		route.add(trainStationItems[begin]);
+		/**
+		 * 遍历所有的站点获得第一个站点到达所有站点的可能性
+		 */
 		for (int i = 0; i < trainStationItemsNum; i++) {
-			removeDistance(path.size() - 1, distance.size() - 1, distance);
+			removeDistance(route.size() - 1, distance.size() - 1, distance);
 			/**
 			 * 判断起始站点到i站点是否存可以直接到达
 			 */
@@ -77,39 +78,44 @@ public abstract class BaseCalculationRouteSite {
 				 * 两个站点之间有可以连接的铁路线路
 				 */
 
-				if (!path.contains(trainStationItems[i])) {
-					path.add(trainStationItems[i]);
+				if (!route.contains(trainStationItems[i])) {
+					route.add(trainStationItems[i]);
 					distance.add(stationMatrix[begin][i]);
 				}
 				/**
 				 * 判断当前线路是否已经走过
 				 */
-				if (path.get(0).equals(trainStationItems[i])) {
-					path.add(trainStationItems[i]);
+				if (route.get(0).equals(trainStationItems[i])) {
+					route.add(trainStationItems[i]);
 					distance.add(stationMatrix[begin][i]);
 					/**
 					 * 存在循环状态遍历到的节点和当前线路的第一个节点相同
 					 */
 					if (i == end) {
-						routeLengthMap.put(obtainRailwayRoute(path), obtainRailwayRouteLength(distance));
+						routeLengthMap.put(obtainRailwayRoute(route), obtainRailwayRouteLength(distance));
 					}
-					path = new LinkedList<Character>(path);
+					route = new LinkedList<Character>(route);
 					distance = new LinkedList<Integer>(distance);
-					path.remove(path.size() - 1);
+					route.remove(route.size() - 1);
 				} else {
 					if (i == end) {
-						routeLengthMap.put(obtainRailwayRoute(path), obtainRailwayRouteLength(distance));
-						path = new LinkedList<Character>(path);
-						path.remove(path.size() - 1);
-						distance = new LinkedList<Integer>(distance);
-					} else if (path.contains(trainStationItems[i])
-							&& path.get(path.size() - 1).equals(trainStationItems[i])) {
+						routeLengthMap.put(obtainRailwayRoute(route), obtainRailwayRouteLength(distance));
+						route = new LinkedList<Character>(route);
 						/**
-						 * 递归调用下可能的线路需要一个新的path
+						 * 回退到之前的站点,测试后一个站点是否可达
 						 */
-						path.remove(path.size() - 1);
-						// distance.remove(distance.size()-1);
-						obtainRouteSite(i, end, new LinkedList<Character>(path), new LinkedList<Integer>(distance),
+						route.remove(route.size() - 1);
+						distance = new LinkedList<Integer>(distance);
+					} else if (route.contains(trainStationItems[i])
+							&& route.get(route.size() - 1).equals(trainStationItems[i])) {
+						/**
+						 * 构成了一回路
+						 */
+						/**
+						 * 递归调用下可能的线路需要一个新的route
+						 */
+						route.remove(route.size() - 1);
+						obtainRouteSite(i, end, new LinkedList<Character>(route), new LinkedList<Integer>(distance),
 								routeLengthMap);
 					}
 				}
@@ -124,9 +130,9 @@ public abstract class BaseCalculationRouteSite {
 
 	public Map<String, Integer> reachableRailwayLine(int startPoint, int endPoint) {
 		Map<String, Integer> routeLengthMap = new HashMap<String, Integer>();
-		List<Character> path = new LinkedList<Character>();
+		List<Character> route = new LinkedList<Character>();
 		List<Integer> distance = new LinkedList<Integer>();
-		obtainRouteSite(startPoint, endPoint, path, distance, routeLengthMap);
+		obtainRouteSite(startPoint, endPoint, route, distance, routeLengthMap);
 		return routeLengthMap;
 	}
 
